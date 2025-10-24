@@ -35,8 +35,8 @@ async def create_task(content: str, name: str, repository: MongoDBTaskRepository
     """Create a new task"""
     try:
         task = Task.create(content, name)
-        created_task = await repository.create(task)
-        return {"id": created_task.id, "name": created_task.name}
+        created = await repository.create(task)
+        return {"id": created.id, "name": created.name}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
@@ -44,15 +44,13 @@ async def create_task(content: str, name: str, repository: MongoDBTaskRepository
 async def update_task(id: str, content: str, name: Optional[str] = None, repository: MongoDBTaskRepository = Depends(get_task_repository)):
     """Update an existing task"""
     try:
-        # Busca a task existente para manter os dados que não serão alterados
-        existing_task = await repository.read(id)
-        
-        # Atualiza apenas os campos fornecidos
-        existing_task.content = content
+        existing = await repository.read(id)
+
+        existing.content = content
         if name is not None:
-            existing_task.name = name
-        
-        updated_task = await repository.update(id, existing_task)
+            existing.name = name
+
+        updated_task = await repository.update(id, existing)
         return {"detail": f"Task {id} updated successfully", "task": updated_task.dict()}
     except Exception as e:
         if "not found" in str(e).lower():

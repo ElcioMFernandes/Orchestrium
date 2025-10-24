@@ -1,6 +1,26 @@
+import "./globals.css";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+} from "@/components/ui/sidebar";
+import {
+  TbCalendarClock,
+  TbCode,
+  TbFileCode,
+  TbLogs,
+  TbSettings,
+  TbSubtask,
+} from "react-icons/tb";
+import Link from "next/link";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,12 +42,74 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const menu = [
+    {
+      name: "Tasks",
+      url: "/tasks",
+      icon: TbCode,
+    },
+    {
+      name: "Triggers",
+      url: "/triggers",
+      icon: TbCalendarClock,
+    },
+    {
+      name: "Jobs",
+      url: "/jobs",
+      icon: TbSubtask,
+    },
+    {
+      name: "Logs",
+      url: "/logs",
+      icon: TbLogs,
+    },
+    {
+      name: "Docs",
+      url: "/docs",
+      icon: TbFileCode,
+    },
+    {
+      name: "Settings",
+      url: "/settings",
+      icon: TbSettings,
+    },
+  ];
+
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans`}
       >
-        {children}
+        <SidebarProvider>
+          <Sidebar>
+            <SidebarContent>
+              <SidebarGroup>
+                <Link href={"/"}>
+                  <h1 className="font-mono text-2xl">Orchestrium</h1>
+                </Link>
+                <SidebarGroupLabel>Menu</SidebarGroupLabel>
+                <SidebarGroupContent>
+                  <SidebarMenu>
+                    {menu.map((item) => (
+                      <SidebarMenuItem key={item.name}>
+                        <SidebarMenuButton asChild>
+                          <Link href={item.url}>
+                            <item.icon />
+                            <span>{item.name}</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    ))}
+                  </SidebarMenu>
+                </SidebarGroupContent>
+              </SidebarGroup>
+            </SidebarContent>
+          </Sidebar>
+          <main className="flex-1 flex flex-col p-2">
+            <nav className="flex flex-row items-center justify-between"></nav>
+            {children}
+          </main>
+        </SidebarProvider>
       </body>
     </html>
   );

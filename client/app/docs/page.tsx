@@ -1,7 +1,7 @@
-export default function Home() {
+export default function Docs() {
   return (
     <div className="flex-1">
-      <h2>Home</h2>
+      <h2>Docs</h2>
     </div>
   );
 }

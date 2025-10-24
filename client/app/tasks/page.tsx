@@ -1,7 +1,7 @@
-export default function Home() {
+export default function Tasks() {
   return (
     <div className="flex-1">
-      <h2>Home</h2>
+      <h2>Tasks</h2>
     </div>
   );
 }
